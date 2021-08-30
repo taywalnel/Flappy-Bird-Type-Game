@@ -8,6 +8,7 @@ var speed = 1.8;
 var gameStarted = false;
 scoreNode.innerText = score;
 
+//decreases the character's height (gravity)
 function gravity(){
     var acceleration = 0;
     var gravityInterval = setInterval(() => {
@@ -15,6 +16,7 @@ function gravity(){
         if(top < 970 && !stopGravity){            
             let newTop = top + acceleration;
             character.style.top = newTop + "px";
+            //makes the character fall quicker as time passes
             acceleration += 0.17;
         }else{
             clearInterval(gravityInterval);
@@ -22,16 +24,20 @@ function gravity(){
     }, 10);
 };
 
+//increases the character's height (flaps wings)
 function fly(){
     let count = 0;
     let newTop = top - 10;
     character.style.top = newTop + "px";
     var flyInterval = setInterval(() => {
+        //if the count is less than or equal to 20 increase character's height and end gravity
         if(count <= 20){
+            //stops gravity while charcter is flying
             stopGravity = true;
             let top = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
             character.style.top = top - 4 + "px";
             count += 1;
+        //if the count if greater than 20 end the fly interval and allow gravity
         }else{
             clearInterval(flyInterval);
             stopGravity = false;
@@ -40,6 +46,7 @@ function fly(){
     }, 10)
 };
 
+//stops the game if the character hits the ceiling, ground, or a box
 function hitDetection(){   
     setInterval(() => {
         let boxLeft = parseInt(window.getComputedStyle(box).getPropertyValue("left"));
@@ -56,7 +63,7 @@ function hitDetection(){
     }, 10);
 };
 
-
+//sets a new box hole after each iteration of the box animation
 box.addEventListener("animationiteration", () => {
     let newTop = getRandomInt(0, 740);
     hole.style.top = newTop + "px";
